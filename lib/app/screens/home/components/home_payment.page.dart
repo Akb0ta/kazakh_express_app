@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bus_app/api/api.dart';
 import 'package:bus_app/api/local_storage.dart';
 import 'package:bus_app/app/functions/global_functions.dart';
@@ -5,6 +7,7 @@ import 'package:bus_app/app/screens/home/components/payment_components/payment_d
 import 'package:bus_app/app/screens/home/components/payment_components/payment_success_page.dart';
 import 'package:bus_app/app/widgets/buttons/custom_back_button.dart';
 import 'package:bus_app/app/widgets/buttons/custom_button.dart';
+import 'package:bus_app/app/widgets/modals/fake_pay_modal.dart';
 import 'package:bus_app/app/widgets/textfields/custom_textfiled.dart';
 import 'package:bus_app/data/local_data.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +33,7 @@ class _HomePaymentPageState extends State<HomePaymentPage> {
   String cardDateString = '';
   String cardCvvString = '';
   String promoString = '';
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -141,8 +144,28 @@ class _HomePaymentPageState extends State<HomePaymentPage> {
               SizedBox(
                 height: 10,
               ),
+              (promo.text == '2024')
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Promo code',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                          Text('400' + ' KZT')
+                        ],
+                      ),
+                    )
+                  : SizedBox(),
+              SizedBox(
+                height: 5,
+              ),
               Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.only(left: 15.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -151,7 +174,11 @@ class _HomePaymentPageState extends State<HomePaymentPage> {
                       style: TextStyle(
                           fontWeight: FontWeight.w600, color: Colors.black),
                     ),
-                    Text(widget.localData['price'] + ' KZT')
+                    (promo.text == '2024')
+                        ? Text((int.parse(widget.localData['price']) - 400)
+                                .toString() +
+                            ' KZT')
+                        : Text(widget.localData['price'] + ' KZT')
                   ],
                 ),
               ),
@@ -161,6 +188,17 @@ class _HomePaymentPageState extends State<HomePaymentPage> {
               CustomButton(
                 text: 'Confirm and pay',
                 function: () async {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return PaymentModal();
+                    },
+                  );
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await Future.delayed(Duration(seconds: 5));
+
                   var routeData = await ApiClient()
                       .get('routes', widget.resData['routeID']);
                   var seatIndex = GlobalFunctions().getSeatIndex(widget
@@ -199,13 +237,11 @@ class _HomePaymentPageState extends State<HomePaymentPage> {
                   var userTickets =
                       userData!['tickets']; // assuming it's a List
                   var newTicket = {
-                    'aPoint': routeData['aPoint'],
-                    'bPoint': routeData['bPoint'],
-                    'startTime': routeData['startTime'],
-                    'finishTime': routeData['finishTime'],
+                    'routeId': routeData['routeID'],
+                    'rate': widget.localData['fare'],
                     'date': widget.localData['date'],
                     'seat': widget.localData['seat'],
-                    // 'companyName':widget.localData['companyName']
+                    'name': userData['name']
                   };
 
                   var newUserTickets = [...userTickets, newTicket];
@@ -214,14 +250,19 @@ class _HomePaymentPageState extends State<HomePaymentPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PaymentSuccessPage()),
+                        builder: (context) => PaymentSuccessPage(
+                              resData: newTicket,
+                            )),
                   );
+                  setState(() {
+                    isLoading = false;
+                  });
                 },
+                isLoading: isLoading,
                 isEnable: (cardName.text.length != 0 &&
                         cardNumber.text.length != 0 &&
                         cardDate.text.length != 0 &&
-                        cardCvv.text.length != 0 &&
-                        promo.text.length != 0)
+                        cardCvv.text.length != 0)
                     ? true
                     : false,
               ),

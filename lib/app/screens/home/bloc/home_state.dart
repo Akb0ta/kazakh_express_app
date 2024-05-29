@@ -9,8 +9,10 @@ final class HomeLoaded extends HomeState {
   final String selectedImage;
   final int selectedIndex;
   final int selectedFare;
+  final companyData;
   HomeLoaded(
       {required this.selectedImage,
       required this.selectedIndex,
+      required this.companyData,
       required this.selectedFare});
 }

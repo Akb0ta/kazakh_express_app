@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class BookBusCard extends StatelessWidget {
@@ -20,9 +22,16 @@ class BookBusCard extends StatelessWidget {
         generatedSeats.add(false);
       }
     } else {
+      var isExist = false;
       for (var seat in seatAvailable) {
         if (seat['date'] == date) {
           generatedSeats = seat['seats'];
+          isExist = true;
+        }
+      }
+      if (isExist == false) {
+        for (int i = 0; i < 15 * 4; i++) {
+          generatedSeats.add(false);
         }
       }
     }

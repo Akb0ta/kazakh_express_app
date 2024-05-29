@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:bus_app/app/screens/events/events_screen.dart';
 import 'package:bus_app/app/screens/home/home_screen.dart';
+import 'package:bus_app/app/screens/profile/profile_screen.dart';
 import 'package:bus_app/app/screens/tickets/ticket_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -12,8 +14,8 @@ class MainNavigatorBloc extends Bloc<MainNavigatorEvent, MainNavigatorState> {
     List screens = [
       HomeScreen(),
       TicketScreen(),
-      Container(),
-      Container(),
+      EventsScreen(),
+      ProfileScreen(),
       // WorkersScreen(),
       // RevenueScreen(),
       // SettingsScreen(),

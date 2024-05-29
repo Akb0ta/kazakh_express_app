@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bus_app/app/screens/home/components/home_search_card.dart';
 import 'package:bus_app/const/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   int selectedType = 0;
-  var resData = [];
+  List<dynamic> res = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,14 +147,21 @@ class _SearchPageState extends State<SearchPage> {
                 SizedBox(
                   height: 20,
                 ),
-                (resData.length == 0)
+                (res.length == 0)
                     ? (widget.resData.length != 0)
                         ? Column(
                             children: widget.resData.map<Widget>((e) {
+                              Random random = Random();
+
+                              // Generate a random number between 0 and 1
+                              double randomNumber = random.nextDouble();
+
+                              print(randomNumber);
                               return Padding(
                                   padding: EdgeInsets.only(
                                       top: 15, left: 10, right: 10),
                                   child: HomeSearchCard(
+                                    isFast: (randomNumber == 0) ? true : false,
                                     localData: widget.localDatas,
                                     data: e,
                                   ));
@@ -162,11 +171,17 @@ class _SearchPageState extends State<SearchPage> {
                             child: Text('Not founded!'),
                           )
                     : Column(
-                        children: resData.map<Widget>((e) {
+                        children: res.map<Widget>((e) {
+                          int index = res.indexOf(e);
                           return Padding(
                               padding:
                                   EdgeInsets.only(top: 15, left: 10, right: 10),
                               child: HomeSearchCard(
+                                isFast: (selectedType == 1 && index == 0)
+                                    ? false
+                                    : ((selectedType == 2 && index == 0))
+                                        ? false
+                                        : true,
                                 localData: widget.localDatas,
                                 data: e,
                               ));
@@ -220,9 +235,32 @@ class _SearchPageState extends State<SearchPage> {
                     GestureDetector(
                       onTap: () {
                         selectedType = 1;
+
                         if (widget.resData.length > 1) {
-                          resData = widget.resData.sort((a, b) =>
-                              a['prices'][0].compareTo(b['prices'][0]));
+                          widget.resData.sort((a, b) {
+                            // Parse estimate time into hours and minutes
+                            List<String> aParts = a['estimate'].split(' ');
+                            List<String> bParts = b['estimate'].split(' ');
+
+                            int aHours = int.parse(aParts[0]);
+                            int aMinutes =
+                                aParts.length > 2 ? int.parse(aParts[2]) : 0;
+
+                            int bHours = int.parse(bParts[0]);
+                            int bMinutes =
+                                bParts.length > 2 ? int.parse(bParts[2]) : 0;
+
+                            // Compare hours
+                            int hourComparison = aHours.compareTo(bHours);
+
+                            // If hours are equal, compare minutes
+                            if (hourComparison == 0) {
+                              return aMinutes.compareTo(bMinutes);
+                            } else {
+                              return hourComparison;
+                            }
+                          });
+                          res = widget.resData;
                         }
                         setState(() {});
                       },
@@ -249,6 +287,12 @@ class _SearchPageState extends State<SearchPage> {
                       onTap: () {
                         setState(() {
                           selectedType = 2;
+                          if (widget.resData.length > 1) {
+                            widget.resData.sort((a, b) =>
+                                (int.parse(a['prices'][0]) as int)
+                                    .compareTo(int.parse(b['prices'][0])));
+                            res = widget.resData;
+                          }
                         });
                       },
                       child: Container(

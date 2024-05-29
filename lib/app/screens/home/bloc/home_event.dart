@@ -3,7 +3,10 @@ part of 'home_bloc.dart';
 @immutable
 sealed class HomeEvent {}
 
-class HomeLoad extends HomeEvent {}
+class HomeLoad extends HomeEvent {
+  String companyId;
+  HomeLoad({required this.companyId});
+}
 
 class HomeChangeSelectedImage extends HomeEvent {
   String image;

@@ -7,8 +7,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 class HomeSearchCard extends StatefulWidget {
   final data;
   final localData;
+  final isFast;
   const HomeSearchCard(
-      {super.key, required this.data, required this.localData});
+      {super.key,
+      required this.data,
+      required this.localData,
+      required this.isFast});
 
   @override
   State<HomeSearchCard> createState() => _HomeSearchCardState();
@@ -32,7 +36,8 @@ class _HomeSearchCardState extends State<HomeSearchCard> {
     var companyData =
         await ApiClient().get('companies', widget.data['companyID']);
     setState(() {
-      companyName = companyData!['name'];
+      print(widget.data['companyID']);
+      companyName = companyData!['name'] ?? 'Express';
     });
   }
 
@@ -63,16 +68,28 @@ class _HomeSearchCardState extends State<HomeSearchCard> {
                   Text(companyName)
                 ],
               ),
-              Container(
-                color: Colors.green.withOpacity(0.2),
-                padding: EdgeInsets.all(10),
-                child: Center(
-                    child: Text(
-                  'CHEAP',
-                  style: TextStyle(
-                      color: Colors.green, fontWeight: FontWeight.w700),
-                )),
-              )
+              (widget.isFast == true)
+                  ? Container(
+                      color: Colors.green.withOpacity(0.2),
+                      padding: EdgeInsets.all(10),
+                      child: Center(
+                          child: Text(
+                        'CHEAPEST',
+                        style: TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.w700),
+                      )),
+                    )
+                  : Container(
+                      color: Colors.purpleAccent.withOpacity(0.2),
+                      padding: EdgeInsets.all(10),
+                      child: Center(
+                          child: Text(
+                        'FASTEST',
+                        style: TextStyle(
+                            color: Colors.purpleAccent,
+                            fontWeight: FontWeight.w700),
+                      )),
+                    )
             ],
           ),
           SizedBox(

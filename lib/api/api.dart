@@ -62,8 +62,6 @@ class ApiClient {
     String weekFromName = GlobalFunctions().getWeekNameFromString(fromDay);
     String roadFromDay = GlobalFunctions().shortWeekName(weekFromName);
 
-    String weekToDay = GlobalFunctions().getWeekNameFromString(toDay);
-    String roadToDay = GlobalFunctions().shortWeekName(weekToDay);
     var combinedDocs;
     QuerySnapshot query = await FirebaseFirestore.instance
         .collection('routes')
@@ -77,6 +75,8 @@ class ApiClient {
       if (toDay == '') {
         combinedDocs = query.docs;
       } else {
+        String weekToDay = GlobalFunctions().getWeekNameFromString(toDay);
+        String roadToDay = GlobalFunctions().shortWeekName(weekToDay);
         combinedDocs = query.docs;
         QuerySnapshot query2 = await FirebaseFirestore.instance
             .collection('routes')

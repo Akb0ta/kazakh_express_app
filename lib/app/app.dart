@@ -18,9 +18,6 @@ class BusApp extends StatelessWidget {
         BlocProvider(
           create: (context) => MainNavigatorBloc()..add(MainNavigatorLoad()),
         ),
-        BlocProvider(
-          create: (context) => HomeBloc()..add(HomeLoad()),
-        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
