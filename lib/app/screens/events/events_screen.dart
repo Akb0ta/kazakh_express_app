@@ -1,15 +1,35 @@
 import 'package:bus_app/app/screens/events/components/events_trending_card.dart';
+import 'package:bus_app/app/widgets/modals/search_modal.dart';
 import 'package:bus_app/app/widgets/textfields/custom_textfiled.dart';
 import 'package:bus_app/const/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class EventsScreen extends StatelessWidget {
+class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});
 
   @override
+  State<EventsScreen> createState() => _EventsScreenState();
+}
+
+class _EventsScreenState extends State<EventsScreen> {
+  TextEditingController search = TextEditingController();
+  String searchText = '';
+  String city = 'Almaty';
+  void _onTextChanged() {
+    setState(() {
+      searchText = search.text;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    search.addListener(_onTextChanged);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    TextEditingController search = TextEditingController();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -17,7 +37,7 @@ class EventsScreen extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(color: AppColors.primary),
-              height: MediaQuery.of(context).size.height / 3.5,
+              height: MediaQuery.of(context).size.height / 3.1,
               width: MediaQuery.of(context).size.width,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -46,12 +66,26 @@ class EventsScreen extends StatelessWidget {
                         SizedBox(
                           width: 5,
                         ),
-                        Text(
-                          'Almaty',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
+                        GestureDetector(
+                          onTap: () async {
+                            var data = await showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.white,
+                              isScrollControlled: true,
+                              builder: (context) {
+                                return SearchModal();
+                              },
+                            );
+                            city = data;
+                            setState(() {});
+                          },
+                          child: Text(
+                            city,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
                         ),
                         SizedBox(
                           width: 5,
@@ -86,6 +120,7 @@ class EventsScreen extends StatelessWidget {
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('events')
+                        .where('city', isEqualTo: city)
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -97,7 +132,6 @@ class EventsScreen extends StatelessWidget {
                             'Error: ${snapshot.error}'); // Display an error message if there's an error
                       }
                       if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
-                        // Iterate through the documents in the snapshot and build your UI
                         return ListView(
                           padding: EdgeInsets.only(top: 10),
                           physics: NeverScrollableScrollPhysics(),
@@ -106,6 +140,14 @@ class EventsScreen extends StatelessWidget {
                               .map((DocumentSnapshot document) {
                             Map<String, dynamic> data =
                                 document.data() as Map<String, dynamic>;
+                            if (searchText.isNotEmpty &&
+                                !data['name']
+                                    .toString()
+                                    .toLowerCase()
+                                    .contains(searchText.toLowerCase())) {
+                              return SizedBox
+                                  .shrink(); // Filter out the item if it doesn't match the search text
+                            }
                             return EventsTrendingCard(data: data);
                           }).toList(),
                         );

@@ -30,7 +30,7 @@ class _SearchPageState extends State<SearchPage> {
                     left: 25.0,
                     bottom: 16.0,
                   ),
-                  height: MediaQuery.of(context).size.height / 3.8,
+                  height: MediaQuery.of(context).size.height / 3.5,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     color: AppColors.primary,
@@ -47,7 +47,7 @@ class _SearchPageState extends State<SearchPage> {
                           Navigator.pop(context);
                         },
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 70.0),
+                          padding: const EdgeInsets.only(top: 60.0),
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: CircleAvatar(
@@ -192,7 +192,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
           Padding(
             padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height / 4.1,
+              top: MediaQuery.of(context).size.height / 3.8,
             ),
             child: Align(
               alignment: Alignment.topCenter,

@@ -46,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 3,
+                    height: MediaQuery.of(context).size.height / 2.7,
                     decoration: BoxDecoration(color: AppColors.primary),
                     child: Column(
                       children: [

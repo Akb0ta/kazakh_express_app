@@ -189,8 +189,6 @@ class _TicketListCardState extends State<TicketListCard> {
               ],
             ),
           )
-        : Center(
-            child: CircularProgressIndicator(),
-          );
+        : SizedBox();
   }
 }

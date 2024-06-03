@@ -52,7 +52,7 @@ class BookPage extends StatelessWidget {
                                 Navigator.pop(context);
                               },
                               child: Padding(
-                                padding: const EdgeInsets.only(top: 70.0),
+                                padding: const EdgeInsets.only(top: 50.0),
                                 child: Align(
                                   alignment: Alignment.topLeft,
                                   child: CircleAvatar(

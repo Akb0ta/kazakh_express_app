@@ -132,7 +132,8 @@ class EventsInfoPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: NetworkImage(data['locationImage']))),
+                      image: NetworkImage(
+                          'https://i.ibb.co.com/D1hjL5X/2024-05-29-00-01-22.png'))),
             )
           ],
         ),

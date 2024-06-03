@@ -123,15 +123,13 @@ class _TicketScreenState extends State<TicketScreen> {
                                 },
                               ),
                             )
-                      : Center(
-                          child: CircularProgressIndicator(),
-                        )
+                      : SizedBox()
                 ],
               ),
             ),
             Padding(
               padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height / 5.5,
+                top: MediaQuery.of(context).size.height / 5.6,
               ),
               child: Align(
                 alignment: Alignment.topCenter,
