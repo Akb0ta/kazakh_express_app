@@ -100,7 +100,7 @@ class _SplashScreenState extends State<SplashScreen> {
             SizedBox(
               width: MediaQuery.of(context).size.width / 1.4,
               child: Text(
-                'The best transfer program in whole Kazahstan! Stay with us!',
+                'The best transfer program in whole Kazakhstan! Stay with us!',
                 style: TextStyle(fontSize: 16, color: Colors.grey[500]),
                 textAlign: TextAlign.center,
               ),

@@ -66,7 +66,7 @@ class GlobalFunctions {
     int count = 0;
 
     for (bool value in list) {
-      if (value == true) {
+      if (value == false) {
         count++;
       }
     }

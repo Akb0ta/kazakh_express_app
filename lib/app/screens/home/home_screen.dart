@@ -278,9 +278,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   count: students,
                                   onDelete: () {
                                     if (children != 0) {
-                                      children--;
+                                      students--;
                                     }
-
                                     setState(() {});
                                   },
                                   title: 'Students',

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class BookBusCard extends StatelessWidget {
   final Function(int value) onChoose;
-  final int selectedBox;
+  final selectedBoxes;
   final String date;
   final seatAvailable;
   const BookBusCard(
@@ -12,7 +12,7 @@ class BookBusCard extends StatelessWidget {
       required this.seatAvailable,
       required this.onChoose,
       required this.date,
-      required this.selectedBox});
+      required this.selectedBoxes});
 
   @override
   Widget build(BuildContext context) {
@@ -157,9 +157,6 @@ class BookBusCard extends StatelessWidget {
   ) {
     return InkWell(
       onTap: () {
-        print(
-          seatAvailable.length ~/ 4,
-        );
         onChoose(index);
       },
       child: Container(
@@ -169,7 +166,7 @@ class BookBusCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: isAvailable
               ? Color.fromARGB(255, 228, 117, 154)
-              : (selectedBox == index)
+              : (selectedBoxes.contains(index))
                   ? Colors.amber
                   : Colors.grey[300],
         ),

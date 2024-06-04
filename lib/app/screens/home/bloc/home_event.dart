@@ -5,7 +5,8 @@ sealed class HomeEvent {}
 
 class HomeLoad extends HomeEvent {
   String companyId;
-  HomeLoad({required this.companyId});
+  String passengetCount;
+  HomeLoad({required this.companyId, required this.passengetCount});
 }
 
 class HomeChangeSelectedImage extends HomeEvent {

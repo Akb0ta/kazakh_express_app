@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:bus_app/app/screens/navigator/main_navigator.dart';
 import 'package:bus_app/app/screens/tickets/components/ticket_card.dart';
 import 'package:bus_app/app/widgets/buttons/custom_button.dart';
@@ -52,8 +53,16 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage> {
                 ),
               ),
               SizedBox(height: 5),
-              TicketCard(
-                resData: widget.resData,
+              Column(
+                children: widget.resData['seat'].map<Widget>((e) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: TicketCard(
+                      seat: e,
+                      resData: widget.resData,
+                    ),
+                  );
+                }).toList(),
               ),
               SizedBox(height: 25),
               CustomButton(

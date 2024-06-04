@@ -11,10 +11,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     int selectedIndex = -1;
     int selectedFare = -1;
     var companyData;
+    var passengers = [];
     on<HomeEvent>((event, emit) async {
       if (event is HomeLoad) {
         selectedIndex = -1;
         selectedFare = -1;
+        for (var i = 0; i < int.parse(event.passengetCount.toString()); i++) {
+          passengers.add(-1);
+        }
         DocumentSnapshot snapshot = await FirebaseFirestore.instance
             .collection('companies')
             .doc(event.companyId)
@@ -25,6 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
         emit(HomeLoaded(
             companyData: companyData,
+            passengers: passengers,
             selectedImage: selectedImage,
             selectedIndex: selectedIndex,
             selectedFare: selectedFare));
@@ -35,11 +40,32 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             companyData: companyData,
             selectedImage: selectedImage,
             selectedIndex: selectedIndex,
+            passengers: passengers,
             selectedFare: selectedFare));
       }
       if (event is HomeChangeSelectedIndex) {
+        print(passengers);
         selectedIndex = event.index;
+        bool isCencelled = false;
+        for (var i = 0; i < passengers.length; i++) {
+          if (passengers[i] == event.index) {
+            passengers[i] = -1;
+            isCencelled = true;
+          }
+        }
+        if (!isCencelled) {
+          bool isChanged = false;
+          for (var i = 0; i < passengers.length; i++) {
+            if (!isChanged) {
+              if (passengers[i] == -1) {
+                isChanged = true;
+                passengers[i] = selectedIndex;
+              }
+            }
+          }
+        }
         emit(HomeLoaded(
+            passengers: passengers,
             selectedImage: selectedImage,
             companyData: companyData,
             selectedIndex: selectedIndex,
@@ -49,6 +75,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         selectedFare = event.index;
         emit(HomeLoaded(
             selectedImage: selectedImage,
+            passengers: passengers,
             companyData: companyData,
             selectedIndex: selectedIndex,
             selectedFare: selectedFare));

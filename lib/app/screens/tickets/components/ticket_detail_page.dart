@@ -17,10 +17,17 @@ class TicketDetailPage extends StatelessWidget {
             SizedBox(
               height: 15,
             ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: TicketCard(resData: resData),
-            ),
+            Column(
+              children: resData['seat'].map<Widget>((e) {
+                return Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: TicketCard(
+                    resData: resData,
+                    seat: e,
+                  ),
+                );
+              }).toList(),
+            )
           ],
         ),
       ),

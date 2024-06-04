@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 class PaymentInfoCard extends StatelessWidget {
   final resData;
   final localData;
+  final selectedSeatsString;
   const PaymentInfoCard(
-      {super.key, required this.resData, required this.localData});
+      {super.key,
+      required this.resData,
+      required this.localData,
+      required this.selectedSeatsString});
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +95,6 @@ class PaymentInfoCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Seat: ' + localData['seat'],
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600),
-              ),
-              Text(
                 (localData['fare'].toString() == '0')
                     ? 'Rate: Restriced'
                     : (localData['fare'].toString() == '1')
@@ -109,12 +106,38 @@ class PaymentInfoCard extends StatelessWidget {
                     fontWeight: FontWeight.w600),
               ),
               Text(
-                'Price: ' + localData['price'] + ' KZT',
+                'Price: ' +
+                    (double.parse(localData['price'].toString()) *
+                            selectedSeatsString.length)
+                        .toStringAsFixed(0) +
+                    ' KZT',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w600),
               ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                'Seats: ',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600),
+              ),
+              Row(
+                children: selectedSeatsString.map<Widget>((e) {
+                  return Text(
+                    (e + ', ').toString().toUpperCase(),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
+                  );
+                }).toList(),
+              )
             ],
           )
         ],

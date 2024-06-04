@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 class TicketCard extends StatefulWidget {
   final resData;
-  const TicketCard({super.key, required this.resData});
+  final String? seat;
+  const TicketCard({super.key, required this.resData, this.seat});
 
   @override
   State<TicketCard> createState() => _TicketCardState();
@@ -156,11 +157,20 @@ class _TicketCardState extends State<TicketCard> {
                                         color: Colors.white,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600)),
-                                Text(widget.resData['seat'],
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400))
+                                (widget.seat != null)
+                                    ? Text(widget.seat.toString().toUpperCase(),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400))
+                                    : Text(
+                                        widget.resData['seat']
+                                            .toString()
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400))
                               ],
                             ),
                             Column(

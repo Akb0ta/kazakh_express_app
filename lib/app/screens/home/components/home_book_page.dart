@@ -21,8 +21,10 @@ class BookPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: AppColors.kPrimaryWhite,
         body: BlocProvider(
-          create: (context) =>
-              HomeBloc()..add(HomeLoad(companyId: resData['companyID'])),
+          create: (context) => HomeBloc()
+            ..add(HomeLoad(
+                companyId: resData['companyID'],
+                passengetCount: localData['passangers'])),
           child: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
               if (state is HomeLoaded) {
@@ -347,7 +349,7 @@ class BookPage extends StatelessWidget {
                         padding: const EdgeInsets.all(15.0),
                         child: BookBusCard(
                             date: localData['date'],
-                            selectedBox: state.selectedIndex,
+                            selectedBoxes: state.passengers,
                             onChoose: (value) {
                               BlocProvider.of<HomeBloc>(context)
                                 ..add(HomeChangeSelectedIndex(index: value));
@@ -462,7 +464,7 @@ class BookPage extends StatelessWidget {
                       BookCheckCard(
                           localData: localData,
                           resData: resData,
-                          seat: state.selectedIndex,
+                          selectedSeatsData: state.passengers,
                           selectedFare: state.selectedFare,
                           price: (state.selectedFare != -1)
                               ? resData['prices'][state.selectedFare].toString()
