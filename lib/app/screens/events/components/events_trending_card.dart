@@ -18,6 +18,7 @@ class EventsTrendingCard extends StatelessWidget {
         );
       },
       child: Container(
+        margin: EdgeInsets.only(top: 15),
         width: MediaQuery.of(context).size.width / 1.2,
         height: 240,
         decoration: BoxDecoration(
